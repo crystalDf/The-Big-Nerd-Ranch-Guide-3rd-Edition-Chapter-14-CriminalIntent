@@ -2,6 +2,9 @@ package com.star.criminalintent;
 
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.star.criminalintent.database.CrimeBaseHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,7 +18,13 @@ public class CrimeLab {
 
     private Map<UUID, Crime> mCrimes;
 
+    private Context mContext;
+    private SQLiteDatabase mSQLiteDatabase;
+
     private CrimeLab(Context context) {
+        mContext = context.getApplicationContext();
+        mSQLiteDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
+
         mCrimes = new LinkedHashMap<>();
     }
 
