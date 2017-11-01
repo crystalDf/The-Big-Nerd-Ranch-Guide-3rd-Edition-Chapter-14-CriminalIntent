@@ -7,16 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import com.star.criminalintent.database.CrimeBaseHelper;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
-
-    private Map<UUID, Crime> mCrimes;
 
     private Context mContext;
     private SQLiteDatabase mSQLiteDatabase;
@@ -24,8 +20,6 @@ public class CrimeLab {
     private CrimeLab(Context context) {
         mContext = context.getApplicationContext();
         mSQLiteDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
-
-        mCrimes = new LinkedHashMap<>();
     }
 
     public static CrimeLab getInstance(Context context) {
@@ -40,18 +34,18 @@ public class CrimeLab {
     }
 
     public List<Crime> getCrimes() {
-        return new ArrayList<>(mCrimes.values());
+        return new ArrayList<>();
     }
 
     public Crime getCrime(UUID id) {
-        return mCrimes.get(id);
+        return null;
     }
 
     public void addCrime(Crime crime) {
-        mCrimes.put(crime.getId(), crime);
+
     }
 
     public void removeCrime(Crime crime) {
-        mCrimes.remove(crime.getId());
+
     }
 }
