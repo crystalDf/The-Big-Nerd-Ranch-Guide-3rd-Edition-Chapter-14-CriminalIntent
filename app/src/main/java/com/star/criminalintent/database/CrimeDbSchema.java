@@ -13,7 +13,7 @@ public class CrimeDbSchema {
             public static final String TITLE = "title";
             public static final String DATE = "date";
             public static final String SOLVED = "solved";
-
+            public static final String REQUIRES_POLICE = "requiresPolice";
         }
 
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
@@ -21,7 +21,8 @@ public class CrimeDbSchema {
                 + Cols.UUID + ", "
                 + Cols.TITLE + ", "
                 + Cols.DATE + ", "
-                + Cols.SOLVED
+                + Cols.SOLVED + ", "
+                + Cols.REQUIRES_POLICE
                 + ")";
     }
 }
