@@ -26,6 +26,7 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+
     public static final int REQUIRES_POLICE = 1;
     public static final int NOT_REQUIRES_POLICE = 0;
 

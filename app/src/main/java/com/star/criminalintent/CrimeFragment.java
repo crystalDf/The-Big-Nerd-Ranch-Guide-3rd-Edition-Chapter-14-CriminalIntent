@@ -32,6 +32,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_CODE = 0;
 
     private Crime mCrime;
+
     private EditText mTitleField;
     private Button mDateButton;
     private Button mTimeButton;
@@ -138,6 +139,13 @@ public class CrimeFragment extends Fragment {
     private void updateUI() {
         mDateButton.setText(mCrime.getFormattedDate());
         mTimeButton.setText(mCrime.getFormattedTime());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
     }
 
     @Override

@@ -3,9 +3,11 @@ package com.star.criminalintent;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.star.criminalintent.database.CrimeBaseHelper;
+import com.star.criminalintent.database.CrimeCursorWrapper;
 import com.star.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 import java.util.ArrayList;
@@ -32,23 +34,63 @@ public class CrimeLab {
                 }
             }
         }
+
         return sCrimeLab;
     }
 
     public List<Crime> getCrimes() {
-        return new ArrayList<>();
+        List<Crime> crimes = new ArrayList<>();
+
+        CrimeCursorWrapper crimeCursorWrapper = queryCrimes(null, null);
+
+        try {
+            while (crimeCursorWrapper.moveToNext()) {
+                crimes.add(crimeCursorWrapper.getCrime());
+            }
+        } finally {
+            crimeCursorWrapper.close();
+        }
+
+        return crimes;
     }
 
     public Crime getCrime(UUID id) {
-        return null;
+        CrimeCursorWrapper crimeCursorWrapper = queryCrimes(
+                CrimeTable.Cols.UUID + " = ? ", new String[] { id.toString() });
+
+        try {
+            if (crimeCursorWrapper.getCount() == 0) {
+                return null;
+            }
+
+            crimeCursorWrapper.moveToFirst();
+            return crimeCursorWrapper.getCrime();
+        } finally {
+            crimeCursorWrapper.close();
+        }
     }
 
     public void addCrime(Crime crime) {
+        ContentValues contentValues = getContentValues(crime);
+        mSQLiteDatabase.insert(CrimeTable.TABLE_NAME, null, contentValues);
+    }
 
+    public void updateCrime(Crime crime) {
+        String uuidString = crime.getId().toString();
+        ContentValues contentValues = getContentValues(crime);
+        mSQLiteDatabase.update(CrimeTable.TABLE_NAME, contentValues,
+                CrimeTable.Cols.UUID + " = ? ", new String[] { uuidString });
+    }
+
+    public CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+        Cursor cursor = mSQLiteDatabase.query(CrimeTable.TABLE_NAME, null, whereClause, whereArgs,
+                null, null, null);
+        return new CrimeCursorWrapper(cursor);
     }
 
     public void removeCrime(Crime crime) {
-
+        mSQLiteDatabase.delete(CrimeTable.TABLE_NAME, CrimeTable.Cols.UUID + " = ? ",
+                new String[] { crime.getId().toString() });
     }
 
     private static ContentValues getContentValues(Crime crime) {
