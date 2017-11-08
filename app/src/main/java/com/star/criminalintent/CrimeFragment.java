@@ -97,7 +97,6 @@ public class CrimeFragment extends Fragment {
                 Intent intent = DatePickerActivity.newIntent(getActivity(), mCrime.getDate());
                 startActivityForResult(intent, REQUEST_CODE);
             }
-
         });
 
         mTimeButton = view.findViewById(R.id.crime_time);
